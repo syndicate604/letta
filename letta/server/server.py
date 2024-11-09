@@ -1901,3 +1901,9 @@ class SyncServer(Server):
         # Get the current message
         letta_agent = self._get_or_load_agent(agent_id=agent_id)
         return letta_agent.get_context_window()
+
+    def update_anthropic_model_list(self, new_model_list: List[LLMConfig]) -> List[LLMConfig]:
+        from letta.llm_api.anthropic import update_model_list
+
+        update_model_list(new_model_list)
+        return new_model_list
