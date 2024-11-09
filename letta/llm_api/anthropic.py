@@ -18,24 +18,6 @@ from letta.utils import get_utc_time, smart_urljoin
 
 BASE_URL = "https://api.anthropic.com/v1"
 
-
-# https://docs.anthropic.com/claude/docs/models-overview
-# Sadly hardcoded
-MODEL_LIST = [
-    {
-        "name": "claude-3-opus-20240229",
-        "context_window": 200000,
-    },
-    {
-        "name": "claude-3-sonnet-20240229",
-        "context_window": 200000,
-    },
-    {
-        "name": "claude-3-haiku-20240307",
-        "context_window": 200000,
-    },
-]
-
 DUMMY_FIRST_USER_MESSAGE = "User initializing bootup sequence."
 
 
@@ -50,7 +32,7 @@ def anthropic_get_model_list(url: str, api_key: Union[str, None]) -> dict:
     """https://docs.anthropic.com/claude/docs/models-overview"""
 
     # NOTE: currently there is no GET /models, so we need to hardcode
-    return MODEL_LIST
+    return get_model_list()
 
 
 def convert_tools_to_anthropic_format(tools: List[Tool]) -> List[dict]:
@@ -360,3 +342,15 @@ def anthropic_chat_completions_request(
 
     response_json = make_post_request(url, headers, data)
     return convert_anthropic_response_to_chatcompletion(response_json=response_json, inner_thoughts_xml_tag=inner_thoughts_xml_tag)
+
+
+def get_model_list() -> List[dict]:
+    """Get the current model list."""
+    global MODEL_LIST
+    return MODEL_LIST
+
+
+def update_model_list(new_model_list: List[dict]) -> None:
+    """Update the model list dynamically."""
+    global MODEL_LIST
+    MODEL_LIST = new_model_list

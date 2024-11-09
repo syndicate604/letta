@@ -30,3 +30,12 @@ def list_embedding_backends(
     models = server.list_embedding_models()
     print(models)
     return models
+
+
+@router.post("/update_anthropic_models", response_model=List[LLMConfig], operation_id="update_anthropic_models")
+def update_anthropic_models(
+    new_model_list: List[LLMConfig],
+    server: "SyncServer" = Depends(get_letta_server),
+):
+    updated_models = server.update_anthropic_model_list(new_model_list)
+    return updated_models
